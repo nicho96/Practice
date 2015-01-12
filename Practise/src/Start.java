@@ -1,12 +1,26 @@
 
 public class Start {
 
+	public int x = 0;
+	
 	public static void main(String[] args){
 		
-		System.out.println("guise look how impressive this is");
-		im("being serious");
+		Start s = new Start();
+		Start t = new Start();
+		
+		s.setX(7);
+		t.setX(10);
+		
+		System.out.println(s.x  + " "  + t.x);
+		
 	}
-	public static void im(String x){
-		System.out.println(x);
+	
+	public static void something(){
+		
 	}
+	
+	public void setX(int y){
+		x = y;
+	}
+	
 }
