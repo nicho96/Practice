@@ -1,10 +1,18 @@
 package com.github.practice;
 
-import javax.swing.JFrame;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 
-import com.github.practise.Frame.GamePanel;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import com.github.practise.frame.GamePanel;
+import com.github.practise.frame.render.SpriteSheet;
 
 public class Game extends JFrame implements Runnable{
+	
+	public static final int WIDTH = 700;
+	public static final int HEIGHT = 500;
 	
 	public static void main(String[] args){
 		
@@ -15,11 +23,11 @@ public class Game extends JFrame implements Runnable{
 	private GamePanel p;
 		
 	public Game(){
-		this.setBounds(10, 10, 500, 500);
+		this.setBounds(10, 10, WIDTH, HEIGHT);
 		this.setLayout(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
-		this.add(p = new GamePanel(500, 500));
+		this.add(p = new GamePanel(WIDTH, HEIGHT));
 		
 		this.start();
 	}
