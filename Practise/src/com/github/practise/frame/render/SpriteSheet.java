@@ -1,20 +1,17 @@
 package com.github.practise.frame.render;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
-import com.sun.prism.Image;
 
 public class SpriteSheet {
 	
 	private int[] spriteData;
 	private int spriteDim;
 	private int tileDim;
-	
+		
 	/**
 	 * Create an instance of a sprite sheet for a specific file. Any world tiles should be added to it
 	 * 
@@ -33,6 +30,7 @@ public class SpriteSheet {
 		
 		this.spriteDim = (int) Math.sqrt(spriteData.length / tileDim / tileDim);	
 		System.out.println(spriteDim);
+				
 	}
 	
 	/**
@@ -71,6 +69,14 @@ public class SpriteSheet {
 		}
 		
 		return ret;
+	}
+	
+	/**
+	 * 
+	 * @return the dimension of a tile
+	 */
+	public int getTileDim(){
+		return tileDim;
 	}
 	
 }

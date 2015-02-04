@@ -1,18 +1,15 @@
 package com.github.practice;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
+import java.awt.Canvas;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import com.github.practise.frame.GamePanel;
-import com.github.practise.frame.render.SpriteSheet;
 
 public class Game extends JFrame implements Runnable{
 	
-	public static final int WIDTH = 700;
-	public static final int HEIGHT = 500;
+	public static final int WIDTH = 1024;
+	public static final int HEIGHT = 768;
 	
 	public static void main(String[] args){
 		
@@ -43,7 +40,7 @@ public class Game extends JFrame implements Runnable{
 		while(true){
 			long current = System.currentTimeMillis();
 			
-			if(current - past > 30){
+			if(current - past > 1){
 				p.render();
 				past = current;
 			}
