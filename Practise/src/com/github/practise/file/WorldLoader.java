@@ -4,8 +4,10 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class WorldLoader {
 
@@ -58,6 +60,29 @@ public class WorldLoader {
 			}
 		}
 		stream.close();
+	}
+	
+	public static void generateMapFromText(String in, String out) throws IOException{
+		File f = new File("map.txt");		
+		int[][] map = new int[11][11];
+		
+		if(f.exists()){
+			Scanner sc = new Scanner(f);
+			
+			String line = "";
+			int y = 0;
+			while(sc.hasNextLine()){
+				line = sc.nextLine();
+				String[] cont = line.split(",");
+				for(int x = 0; x < cont.length; x++){
+					System.out.println(x + "\t" + y);
+					map[x][y] = Integer.parseInt(cont[x]);
+				}
+				y++;
+			}
+			sc.close();
+		}
+		saveMap(out, map);
 	}
 	
 }

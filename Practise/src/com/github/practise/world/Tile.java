@@ -58,7 +58,7 @@ public class Tile {
 	 * Register the tile into the array of tiles
 	 * @param tile the tile you want to add
 	 */
-	public static void registerTile(Tile tile){
+	protected static void registerTile(Tile tile){
 		if(tiles[tile.getID()] == null)
 			tiles[tile.getID()] = tile;
 	}

@@ -3,29 +3,31 @@ package com.github.practise.frame.render;
 import java.io.IOException;
 
 import com.github.practice.Game;
+import com.github.practise.entity.Player;
 import com.github.practise.file.WorldLoader;
-import com.github.practise.frame.GamePanel;
 import com.github.practise.world.Tile;
 
 public class RenderEngine {
 
-	private int[][] worldSpriteSlots = {{2, 2, 2, 2}, {1, 2, 2, 2}, {10, 2, 2, 2}, {1, 2, 2, 2}};	
+	private int[][] worldSpriteSlots;
 	private int[] pixels;
+	
+	private final Player player;
 		
 	/**
 	 * 
 	 * @param pixels the int array of pixels from a buffered image. All pixels are handled in this 1D array for speed, and cannot be overridden
 	 */
 	
-	public RenderEngine(int[] pixels){
+	public RenderEngine(int[] pixels, final Player player){
 		this.pixels = pixels;
 		worldSpriteSlots = new int[Game.WIDTH / Tile.tileDim][Game.HEIGHT / Tile.tileDim];
 		try {
-			worldSpriteSlots = WorldLoader.loadMap("test.bin");
+			worldSpriteSlots = WorldLoader.loadMap("map.bin");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+		this.player = player;
 	}
 
 	/**
@@ -34,33 +36,65 @@ public class RenderEngine {
 	 * Optimization may need to be done, but as it stands I can get 500FPS
 	 */
 	public void render(){
-		int maxX = Game.WIDTH / Tile.tileDim;
-		int maxY = Game.HEIGHT / Tile.tileDim;
-		
-		if(worldSpriteSlots.length < maxX)
-			maxX = worldSpriteSlots.length;
-		
-		if(worldSpriteSlots[0].length < maxY)
-			maxY = worldSpriteSlots[0].length;
-			
-		for(int x = 0; x < maxX; x++){
-			for(int y = 0; y < maxY; y++){
-				
-				int id = worldSpriteSlots[x][y];
-				int[] sprite = Tile.getTile(id).getPixels();
-				
-				int xShift = y * Game.WIDTH * Tile.tileDim;
-				int yShift = x * Tile.tileDim;
-				
-				int ind = 0;
-				for(int i = 0; i < Tile.tileDim; i++){
-					for(int o = 0; o < Tile.tileDim; o++){
-						pixels[xShift + yShift + i * Game.WIDTH + o] = sprite[ind];
-						ind++;
-					}
-				}
-				
+		for(int i = 0; i < pixels.length; i++)
+			pixels[i] = 0;
+		int[][] loaded = getLoadedTiles(player.getLocation().getTileX(), player.getLocation().getTileY());	
+		for(int x = 0; x < loaded.length; x++){
+			for(int y = 0; y < loaded[0].length; y++){
+				if(loaded[x][y] != -1)
+				drawTile(x, y, loaded[x][y], player.getXShift(), player.getYShift());
 			}
 		}
 	}
+	
+	/**
+	 * Draw individual tiles to the screen
+	 * @param x the X tile location
+	 * @param y the Y tile location
+	 * @param id the ID of the tile
+	 */
+	public void drawTile(int x, int y, int id, int xWalk, int yWalk){
+		int xShift = x * Tile.tileDim;
+		int yShift = y * Game.WIDTH*Tile.tileDim;
+		int[] tile = Tile.getTile(id).getPixels();
+		int ind = 0;
+		for(int i = 0; i < Tile.tileDim; i++){
+			for(int o = 0; o < Tile.tileDim; o++){
+				int index = xShift + yShift + (i + yWalk) * Game.WIDTH + o + xWalk;
+				if(xShift + yShift + i * Game.WIDTH + o >= pixels.length)
+					return;
+				if(index > 0 && index < pixels.length)
+				pixels[index] = tile[ind++];
+			}
+		}
+	}
+	
+	/**
+	 * Get an array of loaded tiles
+	 * 
+	 * @param xShift the shift from where you want to collect tiles in the X
+	 * @param yShift the shift from where you want to collect tiles in the y
+	 * @return
+	 */
+	public int[][] getLoadedTiles(int xShift, int yShift){
+		int sizeX = Game.WIDTH / Tile.tileDim;
+		int sizeY = Game.HEIGHT / Tile.tileDim;
+		int[][] loaded = new int[sizeX][sizeY];
+		
+		for(int i = 0; i < sizeX; i++){
+			for(int o = 0; o < sizeY; o++){
+				//A check to make sure pixels are within array bounds, should be an unecessary check in the future
+				if(xShift + i > 0 && yShift + o > 0 && xShift + i < worldSpriteSlots.length && yShift + o < worldSpriteSlots[0].length)
+					loaded[i][o] = worldSpriteSlots[xShift + i][yShift + o];
+				
+				//TODO REMOVE WHEN POSSIBLE FOR EFFICIENCY
+				else
+					loaded[i][o] = -1;
+			}
+		}
+		
+		return loaded;
+	}
+	
+	
 }
