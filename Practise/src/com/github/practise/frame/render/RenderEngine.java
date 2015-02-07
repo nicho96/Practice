@@ -6,12 +6,14 @@ import com.github.practice.Game;
 import com.github.practise.entity.Player;
 import com.github.practise.file.WorldLoader;
 import com.github.practise.world.Tile;
+import com.github.practise.world.World;
 
 public class RenderEngine {
 
 	private int[][] worldSpriteSlots;
 	private int[] pixels;
 	
+	private World world;
 	private final Player player;
 		
 	/**
@@ -21,13 +23,9 @@ public class RenderEngine {
 	
 	public RenderEngine(int[] pixels, final Player player){
 		this.pixels = pixels;
-		worldSpriteSlots = new int[Game.WIDTH / Tile.tileDim][Game.HEIGHT / Tile.tileDim];
-		try {
-			worldSpriteSlots = WorldLoader.loadMap("map.bin");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		this.player = player;
+		this.world = player.getWorld();
+		this.worldSpriteSlots = world.getMap();
 	}
 
 	/**
@@ -55,16 +53,14 @@ public class RenderEngine {
 	 */
 	public void drawTile(int x, int y, int id, int xWalk, int yWalk){
 		int xShift = x * Tile.tileDim;
-		int yShift = y * Game.WIDTH*Tile.tileDim;
+		int yShift = y * Tile.tileDim;
 		int[] tile = Tile.getTile(id).getPixels();
 		int ind = 0;
 		for(int i = 0; i < Tile.tileDim; i++){
 			for(int o = 0; o < Tile.tileDim; o++){
-				int index = xShift + yShift + (i + yWalk) * Game.WIDTH + o + xWalk;
-				if(xShift + yShift + i * Game.WIDTH + o >= pixels.length)
-					return;
+				int index = xShift + xWalk + o + Game.WIDTH * ((i + yWalk) + yShift);
 				if(index > 0 && index < pixels.length)
-				pixels[index] = tile[ind++];
+					pixels[index] = tile[ind++];
 			}
 		}
 	}
@@ -83,9 +79,12 @@ public class RenderEngine {
 		
 		for(int i = 0; i < sizeX; i++){
 			for(int o = 0; o < sizeY; o++){
+				
+				int x = xShift + i - sizeX / 2;
+				int y = yShift + o - sizeY / 2;
 				//A check to make sure pixels are within array bounds, should be an unecessary check in the future
-				if(xShift + i > 0 && yShift + o > 0 && xShift + i < worldSpriteSlots.length && yShift + o < worldSpriteSlots[0].length)
-					loaded[i][o] = worldSpriteSlots[xShift + i][yShift + o];
+				if(x >= 0 && y >= 0 && x < worldSpriteSlots.length && y < worldSpriteSlots[0].length)
+					loaded[i][o] = worldSpriteSlots[x][y];
 				
 				//TODO REMOVE WHEN POSSIBLE FOR EFFICIENCY
 				else

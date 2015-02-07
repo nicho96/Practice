@@ -54,6 +54,10 @@ public class Tile {
 		return sprite;
 	}
 	
+	public boolean isSolid(){
+		return isSolid;
+	}
+	
 	/**
 	 * Register the tile into the array of tiles
 	 * @param tile the tile you want to add

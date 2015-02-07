@@ -50,7 +50,7 @@ public class GamePanel extends JPanel{
 	public void paintComponent(Graphics g){
 		renderEngine.render();
 		g.drawImage(img, 0, 0, null);
-		g.fillRect(Game.WIDTH / 2 - 40, Game.HEIGHT / 2 - 20, 40, 40);
+		g.fillRect(Game.WIDTH / 2, Game.HEIGHT / 2 - 20, 40, 40);
 		g.drawString("FPS: " + fps, 10, 10);
 		g.drawString("Pos: " + player.getLocation().getTileX() + "   " + player.getLocation().getTileY(), 10, 30);
 	}

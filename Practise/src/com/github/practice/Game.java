@@ -1,21 +1,21 @@
 package com.github.practice;
 
-import java.io.IOException;
-
 import javax.swing.JFrame;
 
 import com.github.practise.entity.Location;
 import com.github.practise.entity.Player;
 import com.github.practise.entity.controller.Keyboard;
-import com.github.practise.file.WorldLoader;
 import com.github.practise.frame.GamePanel;
+import com.github.practise.world.World;
 
 public class Game extends JFrame implements Runnable{
 	
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 600;
 	
+	private World world;
 	private final Player player;
+	
 	
 	private boolean lockedFPS = false;
 	
@@ -42,7 +42,8 @@ public class Game extends JFrame implements Runnable{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 		
-		player = new Player(new Location(0, 0), new Keyboard(this));
+		world = new World("50x50", "WORLD");
+		player = new Player(new Location(0,0), new Keyboard(this), world);
 		
 		this.add(p = new GamePanel(WIDTH, HEIGHT, player));
 		this.start();
