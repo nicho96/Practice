@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import com.github.practice.Game;
 import com.github.practise.entity.Player;
 import com.github.practise.frame.render.RenderEngine;
+import com.github.practise.world.Tile;
 
 public class GamePanel extends JPanel{
 	
@@ -51,6 +52,11 @@ public class GamePanel extends JPanel{
 		renderEngine.render();
 		g.drawImage(img, 0, 0, null);
 		g.fillRect(Game.WIDTH / 2, Game.HEIGHT / 2 - 20, 40, 40);
+		
+		int xShift = player.getLocation().getTileX() - player.getLookingLocation().getTileX();
+		int yShift = player.getLocation().getTileY() - player.getLookingLocation().getTileY();
+		
+		g.fillRect(Game.WIDTH / 2 - xShift * 40 + 10, Game.HEIGHT / 2 - yShift * 40 - 10, 20, 20);
 		g.drawString("FPS: " + fps, 10, 10);
 		g.drawString("Pos: " + player.getLocation().getTileX() + "   " + player.getLocation().getTileY(), 10, 30);
 	}

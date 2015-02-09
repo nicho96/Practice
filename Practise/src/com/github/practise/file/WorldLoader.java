@@ -64,7 +64,7 @@ public class WorldLoader {
 	
 	public static void generateMapFromText(String in, String out) throws IOException{
 		File f = new File("map.txt");		
-		int[][] map = new int[11][11];
+		int[][] map = new int[20][10];
 		
 		if(f.exists()){
 			Scanner sc = new Scanner(f);

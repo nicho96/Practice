@@ -1,10 +1,13 @@
 package com.github.practice;
 
+import java.io.IOException;
+
 import javax.swing.JFrame;
 
 import com.github.practise.entity.Location;
 import com.github.practise.entity.Player;
 import com.github.practise.entity.controller.Keyboard;
+import com.github.practise.file.WorldLoader;
 import com.github.practise.frame.GamePanel;
 import com.github.practise.world.World;
 
@@ -23,7 +26,7 @@ public class Game extends JFrame implements Runnable{
 		
 		new Game();
 		/*try {
-			WorldLoader.generateMapFromText("map.txt", "map.bin");
+			WorldLoader.generateMapFromText("map.txt", "map2.bin");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}*/
@@ -42,8 +45,8 @@ public class Game extends JFrame implements Runnable{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 		
-		world = new World("50x50", "WORLD");
-		player = new Player(new Location(0,0), new Keyboard(this), world);
+		world = new World("map2.bin", "WORLD");
+		player = new Player(new Location(5,4), new Keyboard(this), world);
 		
 		this.add(p = new GamePanel(WIDTH, HEIGHT, player));
 		this.start();
@@ -60,12 +63,16 @@ public class Game extends JFrame implements Runnable{
 	 * Secondary thread which runs game updates
 	 */
 	public void run() {
-		long past = System.currentTimeMillis();
+		long lastTick = System.currentTimeMillis();
+		long lastRender = System.currentTimeMillis();
 		while(true){
 			long current = System.currentTimeMillis();
-			if(current - past > 30){
-				past = current;
+			if(current - lastTick > 30){
+				lastTick = current;
 				player.tick();
+			}
+			if(current - lastRender > 1){
+				lastRender = current;
 				p.render();
 			}
 		}

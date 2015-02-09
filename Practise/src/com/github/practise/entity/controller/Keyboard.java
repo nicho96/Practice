@@ -8,10 +8,12 @@ import com.github.practise.entity.Location;
 
 public class Keyboard implements KeyListener{
 	
+	public final Key W = new Key();
 	public final Key UP = new Key();
 	public final Key LEFT = new Key();
 	public final Key DOWN = new Key();
 	public final Key RIGHT = new Key();
+	public final Key SPACE = new Key();
 
 	
 	public Keyboard(Game g){
@@ -19,29 +21,37 @@ public class Keyboard implements KeyListener{
 	}
 	
 	public void keyPressed(KeyEvent e) {
-
+		if(e.getKeyCode() == 38)
+			UP.isPressed = true;
+		if(e.getKeyCode() == 37)
+			LEFT.isPressed = true;
+		if(e.getKeyCode() == 40)
+			DOWN.isPressed = true;
+		if(e.getKeyCode() == 39)
+			RIGHT.isPressed = true;
+		if(e.getKeyCode() == 87)
+			W.isPressed = true;
+		if(e.getKeyCode() == KeyEvent.VK_SPACE)
+			SPACE.isPressed = true;
 	}
 
 	public void keyReleased(KeyEvent e) {
-		if(e.getKeyChar() == 'w')
+		if(e.getKeyCode() == 38)
 			UP.isPressed = false;
-		if(e.getKeyChar() == 'a')
+		if(e.getKeyCode() == 37)
 			LEFT.isPressed = false;
-		if(e.getKeyChar() == 's')
+		if(e.getKeyCode() == 40)
 			DOWN.isPressed = false;
-		if(e.getKeyChar() == 'd')
+		if(e.getKeyCode() == 39)
 			RIGHT.isPressed = false;
+		if(e.getKeyCode() == 87)
+			W.isPressed = false;
+		if(e.getKeyCode() == KeyEvent.VK_SPACE)
+			SPACE.isPressed = false;
 	}
 
 	public void keyTyped(KeyEvent e) {
-		if(e.getKeyChar() == 'w')
-			UP.isPressed = true;
-		if(e.getKeyChar() == 'a')
-			LEFT.isPressed = true;
-		if(e.getKeyChar() == 's')
-			DOWN.isPressed = true;
-		if(e.getKeyChar() == 'd')
-			RIGHT.isPressed = true;
+	
 	}
 	
 	public class Key{

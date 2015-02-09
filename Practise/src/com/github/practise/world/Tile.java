@@ -19,9 +19,10 @@ public class Tile {
 	 * All we need to do is initialize any tile we make in this block. No more tile initialization required
 	 */
 	static{
-		new WaterTile(0, "Water", false);
-		for(int i = 1; i < 100; i++)
-			new Tile(i, i + "", false);
+		new WaterTile(2, "Water", true);
+		for(int i = 0; i < 100; i++)
+			if(i != 2)
+				new Tile(i, i + "", false);
 	}
 	
 	/**

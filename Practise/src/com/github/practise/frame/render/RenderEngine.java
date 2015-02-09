@@ -40,7 +40,7 @@ public class RenderEngine {
 		for(int x = 0; x < loaded.length; x++){
 			for(int y = 0; y < loaded[0].length; y++){
 				if(loaded[x][y] != -1)
-				drawTile(x, y, loaded[x][y], player.getXShift(), player.getYShift());
+					drawTile(x, y, loaded[x][y], player.getXShift(), player.getYShift());
 			}
 		}
 	}

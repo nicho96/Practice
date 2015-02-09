@@ -13,6 +13,7 @@ public class Player extends Entity{
 	private int dir = 0;
 	private int walkDistance;
 	private boolean isWalking;
+	private Location lookingAt;
 	
 	/**
 	 * Creates an instance of the player. There should only ever be one player, if we do go multiplayer support the player call will extend a human entity class, and the human entity class will be the entity on any connected players. 
@@ -31,6 +32,8 @@ public class Player extends Entity{
 	 */
 	public void tick() {
 		move();
+		if(keyboard.SPACE.isPressed)
+			placeTile();
 	}
 	
 	/**
@@ -44,21 +47,22 @@ public class Player extends Entity{
 			else if(keyboard.LEFT.isPressed) dir = 1;
 			else if(keyboard.DOWN.isPressed) dir = 2;
 			else if(keyboard.RIGHT.isPressed) dir = 3;
-			else return;
 			
 			int locX = loc.getTileX();
 			int locY = loc.getTileY();
-			
+
 			if(dir == 0) locY--;
 			else if(dir == 1) locX--;
 			else if(dir == 2) locY++;
 			else if(dir == 3) locX++;
-			
+			lookingAt = new Location(locX, locY);
+			//System.out.println(dir);
+			if(keyboard.W.isPressed){
 			Tile t = world.getTile(locX, locY);
-			if(t == null || t.isSolid())
-				return;
-			
-			isWalking = true;
+				if(t == null || t.isSolid())
+					return;
+				isWalking = true;
+			}
 		}
 	}
 	
@@ -67,21 +71,11 @@ public class Player extends Entity{
 	 */
 	private void updateWalk(){
 		if(walkDistance < Tile.tileDim){
-			walkDistance += 3;
+			walkDistance += 5;
 		}else{
 			isWalking = false;
 			walkDistance = 0;
-			
-			switch(dir){
-			case 0: loc.setY(loc.getTileY() - 1);
-			break;
-			case 1: loc.setX(loc.getTileX() - 1);
-			break;
-			case 2: loc.setY(loc.getTileY() + 1);
-			break;
-			case 3: loc.setX(loc.getTileX() + 1);
-			break;
-			}
+			loc = lookingAt;
 		}
 	}
 	
@@ -107,6 +101,17 @@ public class Player extends Entity{
 		if(dir == 2)
 			return -walkDistance;
 		return 0;
+	}
+	
+	public Location getLookingLocation(){
+		return lookingAt;
+	}
+	
+	public void placeTile(){
+		Tile t = world.getTile(lookingAt.getTileX(), lookingAt.getTileY());
+		if(t != null)
+			world.getMap()[lookingAt.getTileX()][lookingAt.getTileY()] = 12;
+				
 	}
 	
 	public World getWorld(){
