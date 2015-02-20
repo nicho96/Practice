@@ -1,13 +1,12 @@
 package com.github.practice;
 
-import java.io.IOException;
-
 import javax.swing.JFrame;
 
+import com.github.practise.entity.Entity;
 import com.github.practise.entity.Location;
 import com.github.practise.entity.Player;
+import com.github.practise.entity.Zombie;
 import com.github.practise.entity.controller.Keyboard;
-import com.github.practise.file.WorldLoader;
 import com.github.practise.frame.GamePanel;
 import com.github.practise.world.World;
 
@@ -25,6 +24,7 @@ public class Game extends JFrame implements Runnable{
 	public static void main(String[] args){
 		
 		new Game();
+		
 		/*try {
 			WorldLoader.generateMapFromText("map.txt", "map2.bin");
 		} catch (IOException e) {
@@ -46,7 +46,10 @@ public class Game extends JFrame implements Runnable{
 		this.setVisible(true);
 		
 		world = new World("map2.bin", "WORLD");
-		player = new Player(new Location(5,4), new Keyboard(this), world);
+		player = new Player(0, new Location(5,4), new Keyboard(this), world);
+		
+		Entity.spawnEntity(new Zombie(0, new Location(0, 0), world));
+
 		
 		this.add(p = new GamePanel(WIDTH, HEIGHT, player));
 		this.start();
@@ -69,9 +72,11 @@ public class Game extends JFrame implements Runnable{
 			long current = System.currentTimeMillis();
 			if(current - lastTick > 30){
 				lastTick = current;
+				for(Entity ent : Entity.getEntities())
+					ent.tick();
 				player.tick();
 			}
-			if(current - lastRender > 1){
+			if(current - lastRender > 30){
 				lastRender = current;
 				p.render();
 			}

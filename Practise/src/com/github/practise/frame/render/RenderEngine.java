@@ -3,13 +3,20 @@ package com.github.practise.frame.render;
 import java.io.IOException;
 
 import com.github.practice.Game;
+import com.github.practise.entity.Entity;
 import com.github.practise.entity.Player;
-import com.github.practise.file.WorldLoader;
+import com.github.practise.entity.type.EntityType;
 import com.github.practise.world.Tile;
 import com.github.practise.world.World;
 
 public class RenderEngine {
 
+	//A bunch of fields which are constants that would be calculated
+	private static final int tileWidth = Game.WIDTH / Tile.tileDim;
+	private static final int tileHeight = Game.HEIGHT / Tile.tileDim;
+	private static final int centTileWidth = tileWidth / 2;
+	private static final int centTileHeight = tileHeight / 2;
+	
 	private int[][] worldSpriteSlots;
 	private int[] pixels;
 	
@@ -40,9 +47,23 @@ public class RenderEngine {
 		for(int x = 0; x < loaded.length; x++){
 			for(int y = 0; y < loaded[0].length; y++){
 				if(loaded[x][y] != -1)
-					drawTile(x, y, loaded[x][y], player.getXShift(), player.getYShift());
+					drawSprite(x, y, Tile.getTile(loaded[x][y]).getPixels(), player.getXShift(), player.getYShift());
 			}
 		}
+		
+		//Draw the player (will need player sprite sheet later)
+		drawPlayer(centTileWidth, centTileHeight, 0);
+		if(!player.isWalking());
+			drawPlayer(centTileWidth - player.getPlaceX(), centTileHeight - player.getPlaceY(), player.getDirection() + 10);
+		
+		for(Entity ent : Entity.getEntities()){
+			int x = centTileWidth - player.getLocation().getTileX() + ent.getLocation().getTileX();
+			int y = centTileHeight - player.getLocation().getTileY() + ent.getLocation().getTileY();
+			int[] sprite = EntityType.getEntityType(ent.getID()).getPixels();
+			if(x >= 0 && x < tileWidth * 2 && y >= 0 && y < tileWidth * 2)
+				drawSprite(x, y, sprite, player.getXShift(), player.getYShift());
+		}
+		
 	}
 	
 	/**
@@ -51,16 +72,39 @@ public class RenderEngine {
 	 * @param y the Y tile location
 	 * @param id the ID of the tile
 	 */
-	public void drawTile(int x, int y, int id, int xWalk, int yWalk){
+	public void drawSprite(int x, int y, int[] sprite, int xWalk, int yWalk){
 		int xShift = x * Tile.tileDim;
 		int yShift = y * Tile.tileDim;
-		int[] tile = Tile.getTile(id).getPixels();
 		int ind = 0;
 		for(int i = 0; i < Tile.tileDim; i++){
 			for(int o = 0; o < Tile.tileDim; o++){
 				int index = xShift + xWalk + o + Game.WIDTH * ((i + yWalk) + yShift);
 				if(index > 0 && index < pixels.length)
-					pixels[index] = tile[ind++];
+					if(sprite[ind] != -34872)
+						pixels[index] = sprite[ind++];
+			}
+		}
+	}
+	
+	/**
+	 * TODO: either remove this entirely or optimize it for the player
+	 * Needs a fuck tonne of work
+	 * @param x
+	 * @param y
+	 * @param id
+	 */
+	public void drawPlayer(int x, int y, int id){
+		int xShift = x * Tile.tileDim;
+		int yShift = y * Tile.tileDim;
+		int[] tile = EntityType.getEntityType(id).getPixels();
+		int ind = 0;
+		for(int i = 0; i < Tile.tileDim; i++){
+			for(int o = 0; o < Tile.tileDim; o++){
+				int index = xShift + o + Game.WIDTH * (i + yShift);
+				if(index > 0 && index < pixels.length)
+					if(tile[ind] != -34872)
+						pixels[index] = tile[ind];
+				ind++;
 			}
 		}
 	}

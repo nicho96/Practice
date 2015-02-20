@@ -4,7 +4,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import com.github.practice.Game;
-import com.github.practise.entity.Location;
 
 public class Keyboard implements KeyListener{
 	
@@ -15,7 +14,10 @@ public class Keyboard implements KeyListener{
 	public final Key RIGHT = new Key();
 	public final Key SPACE = new Key();
 
-	
+	/**
+	 * Create a new keyboard listener for a player entity
+	 * @param g the instance of the game
+	 */
 	public Keyboard(Game g){
 		g.addKeyListener(this);
 	}
