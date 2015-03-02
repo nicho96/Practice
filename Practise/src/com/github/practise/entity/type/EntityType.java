@@ -5,7 +5,7 @@ import com.github.practise.frame.render.SpriteSheet;
 public class EntityType {
 
 	private static EntityType[] types = new EntityType[100];
-	private final SpriteSheet sheet = new SpriteSheet("entity.png", 40);
+	private static final SpriteSheet sheet = new SpriteSheet("entity.png", 40);
 	
 	public static final int entDim = 40;
 	protected int[] pixels;

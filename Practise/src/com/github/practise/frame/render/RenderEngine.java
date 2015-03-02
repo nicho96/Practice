@@ -1,11 +1,11 @@
 package com.github.practise.frame.render;
 
-import java.io.IOException;
-
 import com.github.practice.Game;
 import com.github.practise.entity.Entity;
 import com.github.practise.entity.Player;
 import com.github.practise.entity.type.EntityType;
+import com.github.practise.text.TextBox;
+import com.github.practise.text.TextEngine;
 import com.github.practise.world.Tile;
 import com.github.practise.world.World;
 
@@ -22,6 +22,8 @@ public class RenderEngine {
 	
 	private World world;
 	private final Player player;
+	
+	private TextEngine textEngine;
 		
 	/**
 	 * 
@@ -33,6 +35,11 @@ public class RenderEngine {
 		this.player = player;
 		this.world = player.getWorld();
 		this.worldSpriteSlots = world.getMap();
+		this.textEngine = new TextEngine();
+		
+		TextEngine.addTextBox(new TextBox("ACBEDBABCBDAEBACBDEABDEBCBABEBDBEA", 20, 47, 47, 100));
+		TextEngine.addTextBox(new TextBox("ABCEDEDBABDBABDEDAGDA", 5, 69, 69, 100));
+
 	}
 
 	/**
@@ -53,7 +60,7 @@ public class RenderEngine {
 		
 		//Draw the player (will need player sprite sheet later)
 		drawPlayer(centTileWidth, centTileHeight, 0);
-		if(!player.isWalking());
+		if(!player.isWalking())
 			drawPlayer(centTileWidth - player.getPlaceX(), centTileHeight - player.getPlaceY(), player.getDirection() + 10);
 		
 		for(Entity ent : Entity.getEntities()){
@@ -64,6 +71,16 @@ public class RenderEngine {
 				drawSprite(x, y, sprite, player.getXShift(), player.getYShift());
 		}
 		
+		
+		TextBox box = textEngine.getTextBox();
+		if(box != null){
+			int ind = 0;
+			for(int y = 0; y < box.getHeight() * 20; y++){
+				for(int x = 0; x < box.getWidth() * 20; x++){
+					pixels[y * Game.WIDTH + x + Game.WIDTH * box.getLocY() + box.getLocX()] = box.getPixels()[ind++];
+				}
+			}
+		}
 	}
 	
 	/**

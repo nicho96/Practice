@@ -8,6 +8,7 @@ import com.github.practise.entity.Player;
 import com.github.practise.entity.Zombie;
 import com.github.practise.entity.controller.Keyboard;
 import com.github.practise.frame.GamePanel;
+import com.github.practise.text.TextEngine;
 import com.github.practise.world.World;
 
 public class Game extends JFrame implements Runnable{
@@ -24,7 +25,7 @@ public class Game extends JFrame implements Runnable{
 	public static void main(String[] args){
 		
 		new Game();
-		
+				
 		/*try {
 			WorldLoader.generateMapFromText("map.txt", "map2.bin");
 		} catch (IOException e) {
@@ -45,7 +46,7 @@ public class Game extends JFrame implements Runnable{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 		
-		world = new World("map2.bin", "WORLD");
+		world = new World("50x50", "WORLD");
 		player = new Player(0, new Location(5,4), new Keyboard(this), world);
 		
 		Entity.spawnEntity(new Zombie(0, new Location(0, 0), world));
@@ -75,8 +76,9 @@ public class Game extends JFrame implements Runnable{
 				for(Entity ent : Entity.getEntities())
 					ent.tick();
 				player.tick();
+				TextEngine.tickCurrentBox();
 			}
-			if(current - lastRender > 30){
+			if(current - lastRender > 1){
 				lastRender = current;
 				p.render();
 			}

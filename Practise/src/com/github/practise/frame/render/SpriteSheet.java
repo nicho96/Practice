@@ -17,7 +17,7 @@ public class SpriteSheet {
 	 * 
 	 * An IO exception may be caught, in which case the program terminates as there would be issues with rendering
 	 * @param url The source of the sprite sheet file
-	 * @param tileDim the dimension of a tile (currently 50)
+	 * @param tileDim the dimension of a tile (currently 40)
 	 */
 	public SpriteSheet(String url, int tileDim){
 		this.tileDim = tileDim;
@@ -29,7 +29,7 @@ public class SpriteSheet {
 		}
 		
 		this.spriteDim = (int) Math.sqrt(spriteData.length / tileDim / tileDim);	
-		System.out.println(spriteDim);
+		System.out.println("Loaded sprite sheet: " + url);
 				
 	}
 	

@@ -1,5 +1,6 @@
 package com.github.practise.world;
 
+import com.github.practise.entity.Entity;
 import com.github.practise.frame.render.SpriteSheet;
 
 public class Tile {
@@ -8,7 +9,7 @@ public class Tile {
 	private static Tile[] tiles = new Tile[100];
 	
 	public static int tileDim = 40;
-	private static SpriteSheet tileSheet = new SpriteSheet("sprite.png", tileDim);
+	private static final SpriteSheet tileSheet = new SpriteSheet("sprite.png", tileDim);
 	
 	private int id;
 	private String name;
@@ -58,6 +59,8 @@ public class Tile {
 	public boolean isSolid(){
 		return isSolid;
 	}
+	
+	public void interact(Entity ent){}
 	
 	/**
 	 * Register the tile into the array of tiles

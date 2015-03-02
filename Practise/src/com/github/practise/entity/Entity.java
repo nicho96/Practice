@@ -55,7 +55,6 @@ public abstract class Entity {
 	 * Handles movement between tiles
 	 */
 	protected void updateWalk(){
-		System.out.println();
 		if(walkDistance < Tile.tileDim){
 			walkDistance += 5;
 		}else{

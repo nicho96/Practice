@@ -41,8 +41,10 @@ public class Player extends Entity{
 			lookingAt = new Location(locX, locY);
 		}
 		move();
-		if(keyboard.SPACE.isPressed)
-			placeTile();
+		if(keyboard.SPACE.isPressed){
+			world.getTile(lookingAt.getTileX(), lookingAt.getTileY()).interact(this);
+			keyboard.SPACE.isPressed = false;
+		}
 	}
 	
 	/**
